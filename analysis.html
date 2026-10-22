@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -69,7 +104,390 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-
+<p>execute: echo: false</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/billboard.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(artist, track, date.entered, wk1<span class="sc">:</span>wk4) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 7
+  artist       track                   date.entered   wk1   wk2   wk3   wk4
+  &lt;chr&gt;        &lt;chr&gt;                   &lt;date&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 2 Pac        Baby Don't Cry (Keep... 2000-02-26      87    82    72    77
+2 2Ge+her      The Hardest Part Of ... 2000-09-02      91    87    92    NA
+3 3 Doors Down Kryptonite              2000-04-08      81    70    68    67
+4 3 Doors Down Loser                   2000-10-21      76    76    72    69
+5 504 Boyz     Wobble Wobble           2000-04-15      57    34    25    17
+6 98^0         Give Me Just One Nig... 2000-08-19      51    39    34    26
+7 A*Teens      Dancing Queen           2000-07-08      97    97    96    95
+8 Aaliyah      I Don't Wanna           2000-01-29      84    62    51    41</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(billboard<span class="sc">$</span>date.entered)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       artist          track      date.entered             wk1        
+ Length   :317   Length   :317   Min.   :1999-06-05   Min.   : 15.00  
+ N.unique :228   N.unique :316   1st Qu.:2000-02-05   1st Qu.: 74.00  
+ N.blank  :  0   N.blank  :  0   Median :2000-04-29   Median : 81.00  
+ Min.nchar:  3   Min.nchar:  3   Mean   :2000-05-03   Mean   : 79.96  
+ Max.nchar: 28   Max.nchar: 23   3rd Qu.:2000-08-12   3rd Qu.: 91.00  
+                                 Max.   :2000-12-30   Max.   :100.00  
+                                                                      
+      wk2              wk3              wk4              wk5        
+ Min.   :  8.00   Min.   :  6.00   Min.   :  5.00   Min.   :  2.00  
+ 1st Qu.: 63.00   1st Qu.: 53.00   1st Qu.: 44.75   1st Qu.: 38.75  
+ Median : 73.00   Median : 66.00   Median : 61.00   Median : 57.00  
+ Mean   : 71.17   Mean   : 65.05   Mean   : 59.76   Mean   : 56.34  
+ 3rd Qu.: 84.00   3rd Qu.: 79.00   3rd Qu.: 76.00   3rd Qu.: 73.25  
+ Max.   :100.00   Max.   :100.00   Max.   :100.00   Max.   :100.00  
+ NAs    :5        NAs    :10       NAs    :17       NAs    :25      
+      wk6             wk7              wk8             wk9        
+ Min.   : 1.00   Min.   :  1.00   Min.   : 1.00   Min.   :  1.00  
+ 1st Qu.:33.75   1st Qu.: 30.00   1st Qu.:27.00   1st Qu.: 26.00  
+ Median :51.50   Median : 47.00   Median :45.50   Median : 42.00  
+ Mean   :52.36   Mean   : 49.22   Mean   :47.12   Mean   : 46.34  
+ 3rd Qu.:72.25   3rd Qu.: 67.00   3rd Qu.:67.00   3rd Qu.: 67.00  
+ Max.   :99.00   Max.   :100.00   Max.   :99.00   Max.   :100.00  
+ NAs    :37      NAs    :48       NAs    :57      NAs    :64      
+      wk10             wk11             wk12             wk13       
+ Min.   :  1.00   Min.   :  1.00   Min.   :  1.00   Min.   :  1.00  
+ 1st Qu.: 24.75   1st Qu.: 22.00   1st Qu.: 20.25   1st Qu.: 19.00  
+ Median : 40.00   Median : 42.50   Median : 42.00   Median : 42.50  
+ Mean   : 45.79   Mean   : 45.47   Mean   : 44.20   Mean   : 44.35  
+ 3rd Qu.: 69.00   3rd Qu.: 69.25   3rd Qu.: 67.75   3rd Qu.: 68.75  
+ Max.   :100.00   Max.   :100.00   Max.   :100.00   Max.   :100.00  
+ NAs    :73       NAs    :81       NAs    :95       NAs    :107     
+      wk14             wk15            wk16             wk17       
+ Min.   :  1.00   Min.   :  1.0   Min.   :  1.00   Min.   :  1.00  
+ 1st Qu.: 20.00   1st Qu.: 18.0   1st Qu.: 17.00   1st Qu.: 19.00  
+ Median : 44.00   Median : 46.0   Median : 47.00   Median : 52.00  
+ Mean   : 45.89   Mean   : 47.9   Mean   : 48.24   Mean   : 51.27  
+ 3rd Qu.: 72.50   3rd Qu.: 76.0   3rd Qu.: 76.00   3rd Qu.: 85.00  
+ Max.   :100.00   Max.   :100.0   Max.   :100.00   Max.   :100.00  
+ NAs    :113      NAs    :120     NAs    :135      NAs    :140     
+      wk18             wk19            wk20             wk21      
+ Min.   :  1.00   Min.   : 1.00   Min.   :  2.00   Min.   : 3.00  
+ 1st Qu.: 19.00   1st Qu.:20.75   1st Qu.: 22.25   1st Qu.:10.00  
+ Median : 56.50   Median :55.50   Median : 58.50   Median :24.00  
+ Mean   : 52.11   Mean   :53.17   Mean   : 54.27   Mean   :26.18  
+ 3rd Qu.: 84.00   3rd Qu.:85.00   3rd Qu.: 87.00   3rd Qu.:35.00  
+ Max.   :100.00   Max.   :99.00   Max.   :100.00   Max.   :97.00  
+ NAs    :151      NAs    :161     NAs    :171      NAs    :252    
+      wk22             wk23            wk24            wk25      
+ Min.   :  3.00   Min.   : 3.00   Min.   : 3.00   Min.   : 2.00  
+ 1st Qu.:  9.00   1st Qu.:10.00   1st Qu.:12.00   1st Qu.:12.25  
+ Median : 21.00   Median :20.50   Median :21.50   Median :22.50  
+ Mean   : 25.64   Mean   :23.81   Mean   :26.78   Mean   :26.13  
+ 3rd Qu.: 36.50   3rd Qu.:36.00   3rd Qu.:40.50   3rd Qu.:38.25  
+ Max.   :100.00   Max.   :91.00   Max.   :91.00   Max.   :90.00  
+ NAs    :262      NAs    :269     NAs    :271     NAs    :279    
+      wk26            wk27            wk28           wk29            wk30     
+ Min.   : 1.00   Min.   : 1.00   Min.   : 2.0   Min.   : 2.00   Min.   : 2.0  
+ 1st Qu.:13.75   1st Qu.:12.00   1st Qu.:14.5   1st Qu.:13.75   1st Qu.:16.0  
+ Median :26.00   Median :26.00   Median :23.5   Median :22.50   Median :31.5  
+ Mean   :28.00   Mean   :27.34   Mean   :25.0   Mean   :23.65   Mean   :26.4  
+ 3rd Qu.:40.25   3rd Qu.:38.00   3rd Qu.:37.5   3rd Qu.:36.00   3rd Qu.:38.0  
+ Max.   :89.00   Max.   :86.00   Max.   :58.0   Max.   :49.00   Max.   :45.0  
+ NAs    :281     NAs    :288     NAs    :293    NAs    :297     NAs    :297   
+      wk31            wk32            wk33            wk34      
+ Min.   : 3.00   Min.   : 3.00   Min.   : 2.00   Min.   : 3.00  
+ 1st Qu.:16.00   1st Qu.:14.50   1st Qu.: 5.50   1st Qu.: 5.75  
+ Median :34.00   Median :38.00   Median :24.00   Median :18.50  
+ Mean   :28.74   Mean   :30.28   Mean   :23.17   Mean   :19.30  
+ 3rd Qu.:41.00   3rd Qu.:44.00   3rd Qu.:36.25   3rd Qu.:28.25  
+ Max.   :49.00   Max.   :47.00   Max.   :50.00   Max.   :49.00  
+ NAs    :298     NAs    :299     NAs    :305     NAs    :307    
+      wk35            wk36            wk37            wk38      
+ Min.   : 4.00   Min.   : 5.00   Min.   : 5.00   Min.   : 9.00  
+ 1st Qu.: 5.00   1st Qu.: 6.00   1st Qu.: 9.00   1st Qu.: 9.00  
+ Median :14.00   Median :16.00   Median :16.00   Median :16.00  
+ Mean   :16.89   Mean   :18.56   Mean   :20.89   Mean   :19.38  
+ 3rd Qu.:27.00   3rd Qu.:29.00   3rd Qu.:36.00   3rd Qu.:23.00  
+ Max.   :34.00   Max.   :41.00   Max.   :48.00   Max.   :40.00  
+ NAs    :308     NAs    :308     NAs    :308     NAs    :309    
+      wk39            wk40            wk41            wk42      
+ Min.   : 3.00   Min.   : 1.00   Min.   : 1.00   Min.   : 2.00  
+ 1st Qu.: 8.75   1st Qu.:13.00   1st Qu.:13.00   1st Qu.:11.50  
+ Median :13.00   Median :14.00   Median :14.00   Median :15.00  
+ Mean   :20.25   Mean   :17.86   Mean   :18.57   Mean   :14.17  
+ 3rd Qu.:25.50   3rd Qu.:18.50   3rd Qu.:19.50   3rd Qu.:19.25  
+ Max.   :50.00   Max.   :47.00   Max.   :50.00   Max.   :22.00  
+ NAs    :309     NAs    :310     NAs    :310     NAs    :311    
+      wk43            wk44            wk45           wk46           wk47     
+ Min.   : 3.00   Min.   : 4.00   Min.   : 4.0   Min.   : 5.0   Min.   : 6.0  
+ 1st Qu.:11.75   1st Qu.:10.75   1st Qu.: 9.0   1st Qu.: 7.0   1st Qu.: 7.0  
+ Median :18.00   Median :21.00   Median :17.0   Median :21.0   Median :22.0  
+ Mean   :17.67   Mean   :21.67   Mean   :17.8   Mean   :20.2   Mean   :22.8  
+ 3rd Qu.:23.50   3rd Qu.:29.00   3rd Qu.:28.0   3rd Qu.:31.0   3rd Qu.:38.0  
+ Max.   :32.00   Max.   :45.00   Max.   :31.0   Max.   :37.0   Max.   :41.0  
+ NAs    :311     NAs    :311     NAs    :312    NAs    :312    NAs    :312   
+      wk48            wk49           wk50           wk51            wk52      
+ Min.   : 8.00   Min.   : 9.0   Min.   :10.0   Min.   :12.00   Min.   :15.00  
+ 1st Qu.: 8.75   1st Qu.: 9.0   1st Qu.:11.5   1st Qu.:13.50   1st Qu.:15.75  
+ Median :16.50   Median :18.5   Median :22.5   Median :28.00   Median :29.00  
+ Mean   :20.00   Mean   :22.0   Mean   :26.0   Mean   :29.25   Mean   :30.25  
+ 3rd Qu.:27.75   3rd Qu.:31.5   3rd Qu.:37.0   3rd Qu.:43.75   3rd Qu.:43.50  
+ Max.   :39.00   Max.   :42.0   Max.   :49.0   Max.   :49.00   Max.   :48.00  
+ NAs    :313     NAs    :313    NAs    :313    NAs    :313     NAs    :313    
+      wk53            wk54            wk55            wk56      
+ Min.   :17.00   Min.   :17.00   Min.   :21.00   Min.   :25.00  
+ 1st Qu.:19.25   1st Qu.:18.25   1st Qu.:21.25   1st Qu.:25.25  
+ Median :33.50   Median :19.50   Median :21.50   Median :25.50  
+ Mean   :33.25   Mean   :19.50   Mean   :21.50   Mean   :25.50  
+ 3rd Qu.:47.50   3rd Qu.:20.75   3rd Qu.:21.75   3rd Qu.:25.75  
+ Max.   :49.00   Max.   :22.00   Max.   :22.00   Max.   :26.00  
+ NAs    :313     NAs    :315     NAs    :315     NAs    :315    
+      wk57            wk58            wk59            wk60           wk61      
+ Min.   :26.00   Min.   :31.00   Min.   :32.00   Min.   :37.0   Min.   :42.00  
+ 1st Qu.:26.75   1st Qu.:31.25   1st Qu.:33.75   1st Qu.:37.5   1st Qu.:42.25  
+ Median :27.50   Median :31.50   Median :35.50   Median :38.0   Median :42.50  
+ Mean   :27.50   Mean   :31.50   Mean   :35.50   Mean   :38.0   Mean   :42.50  
+ 3rd Qu.:28.25   3rd Qu.:31.75   3rd Qu.:37.25   3rd Qu.:38.5   3rd Qu.:42.75  
+ Max.   :29.00   Max.   :32.00   Max.   :39.00   Max.   :39.0   Max.   :43.00  
+ NAs    :315     NAs    :315     NAs    :315     NAs    :315    NAs    :315    
+      wk62            wk63            wk64          wk65       wk66        
+ Min.   :42.00   Min.   :45.00   Min.   :50    Min.   :49    Mode:logical  
+ 1st Qu.:43.25   1st Qu.:46.25   1st Qu.:50    1st Qu.:49    NAs :317      
+ Median :44.50   Median :47.50   Median :50    Median :49                  
+ Mean   :44.50   Mean   :47.50   Mean   :50    Mean   :49                  
+ 3rd Qu.:45.75   3rd Qu.:48.75   3rd Qu.:50    3rd Qu.:49                  
+ Max.   :47.00   Max.   :50.00   Max.   :50    Max.   :49                  
+ NAs    :315     NAs    :315     NAs    :315   NAs    :316                 
+   wk67           wk68           wk69           wk70           wk71        
+ Mode:logical   Mode:logical   Mode:logical   Mode:logical   Mode:logical  
+ NAs :317       NAs :317       NAs :317       NAs :317       NAs :317      
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+   wk72           wk73           wk74           wk75           wk76        
+ Mode:logical   Mode:logical   Mode:logical   Mode:logical   Mode:logical  
+ NAs :317       NAs :317       NAs :317       NAs :317       NAs :317      
+                                                                           
+                                                                           
+                                                                           
+                                                                           
+                                                                           </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wk1_n <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(billboard<span class="sc">$</span>wk1))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>billboard <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wk1)) <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> wk1)) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Week 1 ranking"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of tracks"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"Values plotted:"</span>, wk1_n)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">wk1 =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(wk1)),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">wk4 =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(wk4)),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">wk10 =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(wk10)),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">wk20 =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(wk20)),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">wk40 =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(wk40)),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">wk76 =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(wk76))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">everything</span>(),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"week"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"missing"</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">present =</span> <span class="fu">nrow</span>(billboard) <span class="sc">-</span> missing)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  week  missing present
+  &lt;chr&gt;   &lt;int&gt;   &lt;int&gt;
+1 wk1         0     317
+2 wk4        17     300
+3 wk10       73     244
+4 wk20      171     146
+5 wk40      310       7
+6 wk76      317       0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>billboard_long <span class="ot">&lt;-</span> billboard <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"wk"</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"week"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">"wk"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_transform =</span> <span class="fu">list</span>(<span class="at">week =</span> as.integer),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"rank"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>billboard_long <span class="sc">|&gt;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(week) <span class="sc">|&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_rank =</span> <span class="fu">median</span>(rank),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower_quartile =</span> <span class="fu">quantile</span>(rank, <span class="fl">0.25</span>),</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper_quartile =</span> <span class="fu">quantile</span>(rank, <span class="fl">0.75</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> week, <span class="at">y =</span> median_rank)) <span class="sc">+</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">ymin =</span> lower_quartile, <span class="at">ymax =</span> upper_quartile),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Week"</span>,</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Ranking"</span>,</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Typical Billboard ranking over time"</span>,</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Line shows the median; shaded band shows the middle 50% of rankings"</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"wk"</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"week"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"rank"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">week =</span> <span class="fu">parse_number</span>(week)) <span class="sc">|&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(rank)) <span class="sc">|&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(artist, track) <span class="sc">|&gt;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(week, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(week <span class="sc">==</span> <span class="dv">20</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">songs_ending_week_20 =</span> <span class="fu">n</span>(),</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">ranked_below_50 =</span> <span class="fu">sum</span>(rank <span class="sc">&gt;</span> <span class="dv">50</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  songs_ending_week_20 ranked_below_50
+                 &lt;int&gt;           &lt;int&gt;
+1                   80              77</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>billboard_song_summary <span class="ot">&lt;-</span> billboard_long <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(artist, track) <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">first_rank =</span> rank[<span class="fu">which.min</span>(week)],</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">best_rank =</span> <span class="fu">min</span>(rank),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">first_week_at_best_rank =</span> <span class="fu">min</span>(week[rank <span class="sc">==</span> <span class="fu">min</span>(rank)]),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">weeks_on_chart =</span> <span class="fu">n</span>(),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>billboard_song_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 317 × 6
+   artist       track first_rank best_rank first_week_at_best_r…¹ weeks_on_chart
+   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;                  &lt;int&gt;          &lt;int&gt;
+ 1 2 Pac        Baby…         87        72                      3              7
+ 2 2Ge+her      The …         91        87                      2              3
+ 3 3 Doors Down Kryp…         81         3                     32             53
+ 4 3 Doors Down Loser         76        55                      7             20
+ 5 504 Boyz     Wobb…         57        17                      4             18
+ 6 98^0         Give…         51         2                      7             20
+ 7 A*Teens      Danc…         97        95                      4              5
+ 8 Aaliyah      I Do…         84        35                      6             20
+ 9 Aaliyah      Try …         59         1                     14             32
+10 Adams, Yola… Open…         76        57                      9             20
+# ℹ 307 more rows
+# ℹ abbreviated name: ¹​first_week_at_best_rank</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>number_one_songs <span class="ot">&lt;-</span> billboard_song_summary <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(best_rank <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>top_10_songs <span class="ot">&lt;-</span> billboard_song_summary <span class="sc">|&gt;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(best_rank <span class="sc">&lt;=</span> <span class="dv">10</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>notable_songs <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  number_one_songs <span class="sc">|&gt;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(first_week_at_best_rank <span class="sc">==</span> <span class="fu">min</span>(first_week_at_best_rank)) <span class="sc">|&gt;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">notable =</span> <span class="st">"Fastest to number one"</span>),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  number_one_songs <span class="sc">|&gt;</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(first_week_at_best_rank <span class="sc">==</span> <span class="fu">max</span>(first_week_at_best_rank)) <span class="sc">|&gt;</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">notable =</span> <span class="st">"Slowest to number one"</span>),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  top_10_songs <span class="sc">|&gt;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(weeks_on_chart <span class="sc">==</span> <span class="fu">max</span>(weeks_on_chart)) <span class="sc">|&gt;</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">notable =</span> <span class="st">"Longest chart run among top 10"</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    notable, artist, track, first_rank, best_rank,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    first_week_at_best_rank, weeks_on_chart</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(notable_songs, <span class="at">width =</span> <span class="cn">Inf</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  notable                        artist   track  first_rank best_rank
+  &lt;chr&gt;                          &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+1 Fastest to number one          Madonna  Music          41         1
+2 Slowest to number one          Lonestar Amazed         81         1
+3 Longest chart run among top 10 Creed    Higher         81         7
+  first_week_at_best_rank weeks_on_chart
+                    &lt;int&gt;          &lt;int&gt;
+1                       6             24
+2                      40             55
+3                      46             57</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>top_10_long <span class="ot">&lt;-</span> billboard_long <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">semi_join</span>(top_10_songs, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"artist"</span>, <span class="st">"track"</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>notable_long <span class="ot">&lt;-</span> top_10_long <span class="sc">|&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">semi_join</span>(notable_songs, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"artist"</span>, <span class="st">"track"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">song =</span> <span class="fu">paste</span>(artist, track, <span class="at">sep =</span> <span class="st">" - "</span>))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_10_long, <span class="fu">aes</span>(<span class="at">x =</span> week, <span class="at">y =</span> rank, <span class="at">group =</span> <span class="fu">interaction</span>(artist, track))) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"gray70"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> notable_long,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> song),</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="dv">1</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Week"</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Billboard ranking"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Notable songs"</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Billboard rankings for top-10 songs"</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 </main>
 <!-- /main column -->
